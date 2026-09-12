@@ -1,0 +1,473 @@
+/* ========================================
+   星际战机 · DELTA — 全局样式
+   ======================================== */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --bg-deep: #0a0e27;
+    --bg-dark: #1a1040;
+    --neon-blue: #00f0ff;
+    --neon-purple: #b000ff;
+    --neon-orange: #ff6a00;
+    --neon-pink: #ff2d78;
+    --neon-green: #00ff88;
+    --white: #e0e8ff;
+    --glass-bg: rgba(10, 14, 39, 0.85);
+    --glass-border: rgba(0, 240, 255, 0.25);
+    --font-tech: 'Orbitron', sans-serif;
+    --font-body: 'Rajdhani', sans-serif;
+}
+
+html, body {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background: var(--bg-deep);
+    font-family: var(--font-body);
+    color: var(--white);
+    user-select: none;
+    -webkit-user-select: none;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: none;
+}
+
+#game-container {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#game-canvas {
+    display: block;
+    border: 2px solid var(--glass-border);
+    box-shadow: 0 0 30px rgba(0, 240, 255, 0.15), 0 0 60px rgba(0, 240, 255, 0.05);
+    border-radius: 4px;
+}
+
+#ui-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#ui-overlay > * {
+    pointer-events: auto;
+}
+
+/* ========================================
+   屏幕显示/隐藏
+   ======================================== */
+
+.screen {
+    display: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.screen.active {
+    display: flex;
+}
+
+/* ========================================
+   主菜单
+   ======================================== */
+
+.menu-bg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(ellipse at center, rgba(0, 240, 255, 0.05) 0%, transparent 70%);
+    z-index: -1;
+}
+
+.menu-content {
+    text-align: center;
+    animation: fadeInUp 0.8s ease-out;
+}
+
+.game-title {
+    margin-bottom: 60px;
+}
+
+.title-sub {
+    display: block;
+    font-family: var(--font-body);
+    font-size: 1.2rem;
+    color: var(--neon-blue);
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+    opacity: 0.8;
+}
+
+.title-main {
+    display: block;
+    font-family: var(--font-tech);
+    font-size: 3.5rem;
+    font-weight: 900;
+    background: linear-gradient(135deg, var(--neon-blue), var(--neon-purple));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-shadow: none;
+    filter: drop-shadow(0 0 20px rgba(0, 240, 255, 0.4));
+    letter-spacing: 0.15em;
+}
+
+.menu-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    align-items: center;
+    margin-bottom: 40px;
+}
+
+/* ========================================
+   霓虹按钮
+   ======================================== */
+
+.btn-neon {
+    position: relative;
+    padding: 14px 48px;
+    font-family: var(--font-tech);
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--neon-blue);
+    background: transparent;
+    border: 2px solid var(--neon-blue);
+    border-radius: 4px;
+    cursor: pointer;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    transition: all 0.3s ease;
+    box-shadow: 0 0 10px rgba(0, 240, 255, 0.2), inset 0 0 10px rgba(0, 240, 255, 0.05);
+    min-width: 220px;
+    overflow: hidden;
+}
+
+.btn-neon::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(0, 240, 255, 0.15), transparent);
+    transition: left 0.5s ease;
+}
+
+.btn-neon:hover {
+    background: rgba(0, 240, 255, 0.1);
+    box-shadow: 0 0 25px rgba(0, 240, 255, 0.4), inset 0 0 20px rgba(0, 240, 255, 0.1);
+    transform: translateY(-2px);
+}
+
+.btn-neon:hover::before {
+    left: 100%;
+}
+
+.btn-neon:active {
+    transform: translateY(0);
+}
+
+.btn-neon.secondary {
+    color: var(--neon-purple);
+    border-color: var(--neon-purple);
+    box-shadow: 0 0 10px rgba(176, 0, 255, 0.2), inset 0 0 10px rgba(176, 0, 255, 0.05);
+}
+
+.btn-neon.secondary:hover {
+    background: rgba(176, 0, 255, 0.1);
+    box-shadow: 0 0 25px rgba(176, 0, 255, 0.4), inset 0 0 20px rgba(176, 0, 255, 0.1);
+}
+
+/* ========================================
+   最佳战绩
+   ======================================== */
+
+.high-score {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+}
+
+.high-score .label {
+    font-family: var(--font-body);
+    font-size: 0.85rem;
+    color: rgba(224, 232, 255, 0.5);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+}
+
+.high-score .value {
+    font-family: var(--font-tech);
+    font-size: 1.5rem;
+    color: var(--neon-orange);
+    text-shadow: 0 0 10px rgba(255, 106, 0, 0.4);
+}
+
+/* ========================================
+   战机选择界面
+   ======================================== */
+
+.select-content {
+    text-align: center;
+    animation: fadeInUp 0.6s ease-out;
+}
+
+.screen-title {
+    font-family: var(--font-tech);
+    font-size: 1.8rem;
+    color: var(--neon-blue);
+    text-shadow: 0 0 15px rgba(0, 240, 255, 0.4);
+    margin-bottom: 30px;
+    letter-spacing: 0.1em;
+}
+
+.ship-cards {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-bottom: 30px;
+}
+
+.ship-card {
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    border-radius: 8px;
+    padding: 20px;
+    width: 240px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+}
+
+.ship-card:hover {
+    border-color: var(--neon-blue);
+    box-shadow: 0 0 20px rgba(0, 240, 255, 0.2);
+    transform: translateY(-4px);
+}
+
+.ship-card.selected {
+    border-color: var(--neon-blue);
+    box-shadow: 0 0 30px rgba(0, 240, 255, 0.3), inset 0 0 15px rgba(0, 240, 255, 0.05);
+}
+
+.ship-card.locked {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.ship-card.locked:hover {
+    border-color: var(--glass-border);
+    box-shadow: none;
+    transform: none;
+}
+
+.ship-preview {
+    display: block;
+    margin: 0 auto 12px;
+}
+
+.ship-info h3 {
+    font-family: var(--font-tech);
+    font-size: 1rem;
+    color: var(--neon-blue);
+    margin-bottom: 4px;
+}
+
+.ship-type {
+    font-size: 0.8rem;
+    color: var(--neon-purple);
+    margin-bottom: 8px;
+}
+
+.ship-stats {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    font-size: 0.75rem;
+    color: var(--white);
+    margin-bottom: 8px;
+}
+
+.ship-stats strong {
+    color: var(--neon-orange);
+}
+
+.ship-desc {
+    font-size: 0.8rem;
+    color: rgba(224, 232, 255, 0.6);
+}
+
+.unlock-hint {
+    font-size: 0.7rem;
+    color: var(--neon-pink);
+    margin-top: 6px;
+}
+
+/* ========================================
+   暂停界面
+   ======================================== */
+
+.pause-content {
+    text-align: center;
+    animation: fadeIn 0.3s ease;
+    background: var(--glass-bg);
+    padding: 40px 60px;
+    border-radius: 8px;
+    border: 1px solid var(--glass-border);
+    backdrop-filter: blur(10px);
+}
+
+.pause-content .btn-neon {
+    margin: 8px 0;
+}
+
+/* ========================================
+   游戏结束界面
+   ======================================== */
+
+.gameover-content {
+    text-align: center;
+    animation: fadeInUp 0.6s ease-out;
+    background: var(--glass-bg);
+    padding: 40px 60px;
+    border-radius: 8px;
+    border: 1px solid var(--glass-border);
+    backdrop-filter: blur(10px);
+}
+
+.result-stats {
+    margin-bottom: 24px;
+}
+
+.stat-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 40px;
+    padding: 8px 0;
+    border-bottom: 1px solid rgba(0, 240, 255, 0.1);
+}
+
+.stat-label {
+    font-family: var(--font-body);
+    font-size: 0.9rem;
+    color: rgba(224, 232, 255, 0.6);
+}
+
+.stat-value {
+    font-family: var(--font-tech);
+    font-size: 1.1rem;
+    color: var(--neon-blue);
+}
+
+.new-record {
+    justify-content: center;
+    border: none;
+    margin-top: 8px;
+}
+
+.new-record .stat-label {
+    font-size: 1.2rem;
+    color: var(--neon-orange);
+    animation: pulse 1s ease-in-out infinite;
+}
+
+.gameover-content .btn-neon {
+    margin: 6px 0;
+}
+
+/* ========================================
+   动画
+   ======================================== */
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+}
+
+@keyframes glow {
+    0%, 100% {
+        text-shadow: 0 0 10px rgba(0, 240, 255, 0.4);
+    }
+    50% {
+        text-shadow: 0 0 25px rgba(0, 240, 255, 0.8), 0 0 50px rgba(0, 240, 255, 0.3);
+    }
+}
+
+/* ========================================
+   响应式
+   ======================================== */
+
+@media (max-width: 768px) {
+    .title-main {
+        font-size: 2.5rem;
+    }
+    .ship-cards {
+        flex-direction: column;
+        align-items: center;
+    }
+    .ship-card {
+        width: 90%;
+        max-width: 300px;
+    }
+    .btn-neon {
+        min-width: 180px;
+        padding: 12px 36px;
+        font-size: 0.85rem;
+    }
+    .gameover-content,
+    .pause-content {
+        padding: 24px 32px;
+    }
+}
+
+@media (max-width: 480px) {
+    .title-main {
+        font-size: 2rem;
+    }
+    .title-sub {
+        font-size: 0.9rem;
+    }
+}

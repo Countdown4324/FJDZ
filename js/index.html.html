@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>星际战机 · DELTA</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div id="game-container">
+        <canvas id="game-canvas"></canvas>
+        <div id="ui-overlay">
+            <!-- 主菜单 -->
+            <div id="menu-screen" class="screen active">
+                <div class="menu-bg"></div>
+                <div class="menu-content">
+                    <h1 class="game-title">
+                        <span class="title-sub">星际战机</span>
+                        <span class="title-main">DELTA</span>
+                    </h1>
+                    <div class="menu-buttons">
+                        <button class="btn-neon" id="btn-start">开始游戏</button>
+                        <button class="btn-neon" id="btn-select">战机选择</button>
+                        <button class="btn-neon" id="btn-bossrush">BOSS RUSH</button>
+                    </div>
+                    <div class="high-score">
+                        <span class="label">最佳战绩</span>
+                        <span class="value" id="menu-high-score">0</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 战机选择界面 -->
+            <div id="select-screen" class="screen">
+                <div class="select-content">
+                    <h2 class="screen-title">选择战机</h2>
+                    <div class="ship-cards" id="ship-cards">
+                        <div class="ship-card" data-ship="0">
+                            <canvas class="ship-preview" id="preview-0" width="80" height="80"></canvas>
+                            <div class="ship-info">
+                                <h3>先锋号</h3>
+                                <p class="ship-type">均衡型</p>
+                                <div class="ship-stats">
+                                    <span>HP <strong>5</strong></span>
+                                    <span>攻速 <strong>8/s</strong></span>
+                                    <span>移速 <strong>5</strong></span>
+                                </div>
+                                <p class="ship-desc">双发子弹 · 性能均衡</p>
+                            </div>
+                        </div>
+                        <div class="ship-card locked" data-ship="1">
+                            <canvas class="ship-preview" id="preview-1" width="80" height="80"></canvas>
+                            <div class="ship-info">
+                                <h3>速射号</h3>
+                                <p class="ship-type">敏捷型</p>
+                                <div class="ship-stats">
+                                    <span>HP <strong>3</strong></span>
+                                    <span>攻速 <strong>12/s</strong></span>
+                                    <span>移速 <strong>7</strong></span>
+                                </div>
+                                <p class="ship-desc">三发散射 · 闪现技能</p>
+                                <p class="unlock-hint">得分 5000 解锁</p>
+                            </div>
+                        </div>
+                        <div class="ship-card locked" data-ship="2">
+                            <canvas class="ship-preview" id="preview-2" width="80" height="80"></canvas>
+                            <div class="ship-info">
+                                <h3>毁灭号</h3>
+                                <p class="ship-type">重装型</p>
+                                <div class="ship-stats">
+                                    <span>HP <strong>8</strong></span>
+                                    <span>攻速 <strong>4/s</strong></span>
+                                    <span>移速 <strong>3</strong></span>
+                                </div>
+                                <p class="ship-desc">加农炮 · 护盾技能</p>
+                                <p class="unlock-hint">得分 10000 解锁</p>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="btn-neon" id="btn-back-select">返回</button>
+                </div>
+            </div>
+
+            <!-- 暂停界面 -->
+            <div id="pause-screen" class="screen">
+                <div class="pause-content">
+                    <h2 class="screen-title">游戏暂停</h2>
+                    <button class="btn-neon" id="btn-resume">继续游戏</button>
+                    <button class="btn-neon" id="btn-quit">返回菜单</button>
+                </div>
+            </div>
+
+            <!-- 游戏结束界面 -->
+            <div id="gameover-screen" class="screen">
+                <div class="gameover-content">
+                    <h2 class="screen-title">游戏结束</h2>
+                    <div class="result-stats">
+                        <div class="stat-row">
+                            <span class="stat-label">最终得分</span>
+                            <span class="stat-value" id="result-score">0</span>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-label">最高连击</span>
+                            <span class="stat-value" id="result-combo">0</span>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-label">击杀数</span>
+                            <span class="stat-value" id="result-kills">0</span>
+                        </div>
+                        <div class="stat-row new-record" id="new-record" style="display:none;">
+                            <span class="stat-label">🏆 新纪录!</span>
+                        </div>
+                    </div>
+                    <button class="btn-neon" id="btn-retry">再来一局</button>
+                    <button class="btn-neon" id="btn-menu">返回菜单</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/utils/constants.js"></script>
+    <script src="js/utils/math.js"></script>
+    <script src="js/utils/storage.js"></script>
+    <script src="js/entities/Entity.js"></script>
+    <script src="js/entities/Bullet.js"></script>
+    <script src="js/entities/PowerUp.js"></script>
+    <script src="js/entities/Player.js"></script>
+    <script src="js/entities/Enemy.js"></script>
+    <script src="js/entities/Boss.js"></script>
+    <script src="js/systems/Input.js"></script>
+    <script src="js/systems/Audio.js"></script>
+    <script src="js/systems/Particle.js"></script>
+    <script src="js/systems/Collision.js"></script>
+    <script src="js/systems/Wave.js"></script>
+    <script src="js/ui/HUD.js"></script>
+    <script src="js/ui/Menu.js"></script>
+    <script src="js/ui/Score.js"></script>
+    <script src="js/Scene.js"></script>
+    <script src="js/Game.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>
